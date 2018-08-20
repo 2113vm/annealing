@@ -61,7 +61,7 @@ class Solver:
 
 if __name__ == '__main__':
 
-    # best solution 1 -> 3 -> 5 -> 2 -> 4 -> 1 => sum_path = 5
+    # best solution 0 -> 2 -> 4 -> 1 -> 3 -> 0 => sum_path = 5
     distance_matrix = np.array([[0, 5, 1, 1, 5],
                                 [5, 0, 5, 1, 1],
                                 [1, 5, 0, 5, 1],
