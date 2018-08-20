@@ -26,7 +26,6 @@ class Solver:
 
             if fit_random_board == 0:
                 self.current_board = random_board
-                fit_current_board = fit_random_board
                 break
 
             if fit_current_board > fit_random_board:
@@ -38,8 +37,6 @@ class Solver:
                     self.current_board = random_board
                 t = self.alpha * t
             i += 1
-            self.visualization(self.current_board)
-        print(fit_current_board, t, i)
         return self.visualization(self.current_board)
 
     @staticmethod
@@ -52,14 +49,13 @@ class Solver:
         """
         Calculate fitness function
         :param position: position of queens
-        :return: float value of function
+        :return: int value of function
         """
         count = 0
         for index_queen_i in range(8):
             for index_queen_j in range(index_queen_i + 1, 8):
                 if self.is_vertical_or_diagonal_wrong(position, index_queen_i, index_queen_j):
                     count += 1
-
         return count
 
     @staticmethod
