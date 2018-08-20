@@ -24,17 +24,22 @@ class Solver:
             fit_random_board = self.get_valuation(random_board)
             fit_current_board = self.get_valuation(self.current_board)
 
+            if fit_random_board == 0:
+                self.current_board = random_board
+                fit_current_board = fit_random_board
+                break
+
             if fit_current_board > fit_random_board:
                 self.current_board = random_board
             else:
                 p = np.exp(- (fit_random_board - fit_current_board) * 100 / t)
 
-                if p < np.random.random():
+                if p > np.random.random():
                     self.current_board = random_board
                 t = self.alpha * t
             i += 1
             self.visualization(self.current_board)
-        print(fit_current_board)
+        print(fit_current_board, t, i)
         return self.visualization(self.current_board)
 
     @staticmethod
@@ -51,11 +56,11 @@ class Solver:
         """
         count = 0
         for index_queen_i in range(8):
-            for index_queen_j in range(index_queen_i, 8):
+            for index_queen_j in range(index_queen_i + 1, 8):
                 if self.is_vertical_or_diagonal_wrong(position, index_queen_i, index_queen_j):
                     count += 1
 
-        return count / 32
+        return count
 
     @staticmethod
     def is_vertical_or_diagonal_wrong(position, i, j):
@@ -67,5 +72,5 @@ class Solver:
 
 
 if __name__ == '__main__':
-    s = Solver(max_iter=100000)
+    s = Solver(max_iter=100000, alpha=0.98)
     print(s.solve())
