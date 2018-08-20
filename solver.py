@@ -55,7 +55,7 @@ class Solver:
                 if self.is_vertical_or_diagonal_wrong(position, index_queen_i, index_queen_j):
                     count += 1
 
-        return count / 28
+        return count / 32
 
     @staticmethod
     def is_vertical_or_diagonal_wrong(position, i, j):
