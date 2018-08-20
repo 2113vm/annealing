@@ -45,12 +45,6 @@ class Solver:
 
         return self.visualization(self.current_board)
 
-    @staticmethod
-    def get_change_board(position: List[int]):
-        i, j = np.random.choice(position, 2, False)
-        position[i], position[j] = position[j], position[i]
-        return position
-
     def get_valuation(self, position: List[int]):
         """
         Calculate fitness function
@@ -63,6 +57,12 @@ class Solver:
                 if self.is_vertical_or_diagonal_wrong(position, index_queen_i, index_queen_j):
                     count += 1
         return count
+
+    @staticmethod
+    def get_change_board(position: List[int]):
+        i, j = np.random.choice(position, 2, False)
+        position[i], position[j] = position[j], position[i]
+        return position
 
     @staticmethod
     def is_vertical_or_diagonal_wrong(position, i, j):
