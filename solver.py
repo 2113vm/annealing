@@ -6,19 +6,19 @@ import numpy as np
 class Solver:
 
     def __init__(self,
-                 min_temperature: float=0,
+                 min_temperature: float=0.01,
                  max_temperature: float=100,
-                 alpha: float=0.95,
-                 max_iter: int=1000):
+                 alpha: float=0.98,
+                 debug: bool=False):
         self.min_temperature = min_temperature
         self.max_temperature = max_temperature
         self.alpha = alpha
         self.current_board = list(range(0, 8))
-        self.max_iter = max_iter
+        self.debug = debug
 
     def solve(self):
         t, i = self.max_temperature, 0
-        while t > self.min_temperature and i < self.max_iter:
+        while t > self.min_temperature:
 
             random_board = self.get_change_board(self.current_board.copy())
             fit_random_board = self.get_valuation(random_board)
@@ -26,17 +26,23 @@ class Solver:
 
             if fit_random_board == 0:
                 self.current_board = random_board
+                fit_current_board = fit_random_board
                 break
 
             if fit_current_board > fit_random_board:
                 self.current_board = random_board
             else:
-                p = np.exp(- (fit_random_board - fit_current_board) * 100 / t)
+                # calculate probability of change current board
+                p = np.exp(-(fit_random_board - fit_current_board) * 100 / t)
 
                 if p > np.random.random():
                     self.current_board = random_board
                 t = self.alpha * t
             i += 1
+
+        if self.debug:
+            print(f'iteration = {i}, temperature = {t}, fitness function = {fit_current_board}')
+
         return self.visualization(self.current_board)
 
     @staticmethod
@@ -48,7 +54,7 @@ class Solver:
     def get_valuation(self, position: List[int]):
         """
         Calculate fitness function
-        :param position: position of queens
+        :param position: list positions of queens
         :return: int value of function
         """
         count = 0
@@ -68,5 +74,5 @@ class Solver:
 
 
 if __name__ == '__main__':
-    s = Solver(max_iter=100000, alpha=0.98)
+    s = Solver(debug=True)
     print(s.solve())
